@@ -1,0 +1,3 @@
+-[ ] Prompt the user
+-[ ] Fetch GitHub Data
+-[ ] Print user data

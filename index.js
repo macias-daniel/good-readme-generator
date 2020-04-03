@@ -16,8 +16,49 @@ const questions = [
     {
         type: "input",
         name: "username",
-        message: "What is your git hub username"
+        message: "What is your git hub username?"
+    },
+    {
+        type: "input",
+        name: "userEmail",
+        message: "Enter your email so users can contact you for questions"
+    },
+    {
+        type: "input",
+        name: "projectTitle",
+        message: "What is your project's name?"
+    },
+    {
+        type: "input",
+        name: "projectDesc",
+        message: "What is your project's description?"
+    },
+    {
+        type: "input",
+        name: "projectInstall",
+        message: "What should your user know about installing your project / Does it have any dependencies?"
+    },
+    {
+        type: "input",
+        name: "projectUsage",
+        message: "What should the user know about using your project?"
+    },
+    {
+        type: "input",
+        name: "projectLicense",
+        message: "What kind of license does your project have? "
+    },
+    {
+        type: "input",
+        name: "projectContrib",
+        message: "What should the user know about contributing?"
+    },
+    {
+        type: "input",
+        name: "projectTests",
+        message: "How do you run tests for your project?"
     }
+    
 ];
 
 // TODO: Write function to synchronously write data in the
@@ -31,26 +72,84 @@ function writeToFile(fileName, data) {
 // data from GitHub. Finally generate the markdown and use writeToFile
 // to create the README.md file.
 function init() {
+
+    //User inquirer prompt answers to be saved globally 
+    let userAnswers;
+
     inquirer.prompt(questions)
+
     // inquirer callback
     .then( answers => {
 
-        //Saving user username
-        const userName = answers.username
+        //Saving user answers globally 
+        userAnswers = answers
 
         //Building user github api url
-        const gitUrl = `https://api.github.com/users/${userName}` 
+        const gitUrl = `https://api.github.com/users/${userAnswers.username}` 
 
+        //Make and return axios call
         return axios.get(gitUrl)
 
     })
+
     // axios callback
     .then((githubResponse)=>{
-        console.log(githubResponse.data)
+
+
+        const markdownFile = 
+        `
+        # ${userAnswers.projectTitle}
+
+        ## Description
+        ${userAnswers.projectDesc}
+
+        ## Table Of Contents
+        
+        * [Installation](#Installation)
+        
+        * [Usage](#Usage)
+        
+        * [License](#License)
+        
+        * [Contributing](#Contributing)
+        
+        * [Tests](#Tests)
+        
+        * [Questions](#Questions)
+        
+        ## Installation
+        ${userAnswers.projectInstall}
+
+        ## Usage
+        ${userAnswers.projectUsage}
+
+        ## License
+        ${userAnswers.projectLicense}
+
+        ## Contributing 
+        ${userAnswers.projectContrib}
+
+        ## Tests
+        ${userAnswers.projectTests}
+        
+        ## Questions
+        Contact me at ${userAnswers.userEmail} if you have any questions about my project!
+
+        `
+
+
+        console.log(markdownFile)
     })
+
     .catch(error =>{
+
         console.log(error)
+
     })
 }
+
+
+
+
 
 init();

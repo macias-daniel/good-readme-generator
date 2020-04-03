@@ -1,17 +1,9 @@
 // TODO: import fs, path and inquirer modules
 const inquirer = require("inquirer")
 const axios = require("axios")
+const fs = require("fs")
+const markdownGen = require("./markdown")
 
-// TODO: import api and generateMarkdown modules from ./utils/
-
-// TODO: Add inquirer question objects to questions array. This should
-// include all the necessary questions for the user.
-// Example question:
-// {
-//   type: "input",
-//   name: "github",
-//   message: "What is your GitHub username?"
-// }
 const questions = [
     {
         type: "input",
@@ -58,98 +50,40 @@ const questions = [
         name: "projectTests",
         message: "How do you run tests for your project?"
     }
-    
 ];
 
-// TODO: Write function to synchronously write data in the
-// current working directory to file named for the fileName parameter.
-// The data parameter is the text to write to the file.
 function writeToFile(fileName, data) {
+    fs.writeFileSync(`./output/${fileName}`, data)
 }
 
-// TODO: Use inquirer to prompt the user for each question in the
-// questions array. Then call api.getUser to fetch the user profile
-// data from GitHub. Finally generate the markdown and use writeToFile
-// to create the README.md file.
 function init() {
-
-    //User inquirer prompt answers to be saved globally 
-    let userAnswers;
 
     inquirer.prompt(questions)
 
     // inquirer callback
     .then( answers => {
 
-        //Saving user answers globally 
-        userAnswers = answers
-
         //Building user github api url
-        const gitUrl = `https://api.github.com/users/${userAnswers.username}` 
+        const gitUrl = `https://api.github.com/users/${answers.username}` 
 
         //Make and return axios call
-        return axios.get(gitUrl)
+        axios.get(gitUrl).then((githubResponse)=>{
+    
+            //Creating markdown files title
+            const markdownFileName = `${answers.projectTitle}-README.md`
+    
+            //Markdown file content
+            const markdownFile = markdownGen.generate(answers, githubResponse)
+    
+            //Call function to create file
+            writeToFile(markdownFileName, markdownFile)
+        })
 
     })
-
-    // axios callback
-    .then((githubResponse)=>{
-
-
-        const markdownFile = 
-        `
-        # ${userAnswers.projectTitle}
-
-        ## Description
-        ${userAnswers.projectDesc}
-
-        ## Table Of Contents
-        
-        * [Installation](#Installation)
-        
-        * [Usage](#Usage)
-        
-        * [License](#License)
-        
-        * [Contributing](#Contributing)
-        
-        * [Tests](#Tests)
-        
-        * [Questions](#Questions)
-        
-        ## Installation
-        ${userAnswers.projectInstall}
-
-        ## Usage
-        ${userAnswers.projectUsage}
-
-        ## License
-        ${userAnswers.projectLicense}
-
-        ## Contributing 
-        ${userAnswers.projectContrib}
-
-        ## Tests
-        ${userAnswers.projectTests}
-        
-        ## Questions
-        Contact me at ${userAnswers.userEmail} if you have any questions about my project!
-
-        `
-
-
-        console.log(markdownFile)
-    })
-
     .catch(error =>{
-
         console.log(error)
-
     })
 }
-
-
-
 
 
 init();

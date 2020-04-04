@@ -3,6 +3,7 @@ const inquirer = require("inquirer")
 const fs = require("fs")
 const markdownGen = require("./utils/markdown")
 const api = require("./utils/api")
+const path = require("path")
 
 const questions = [
     {
@@ -55,7 +56,11 @@ const questions = [
 //This function creates read me file
 function writeToFile(fileName, data) {
     fs.writeFileSync(`./output/${fileName}`, data)
-    console.log("Your readme file has been created! You can find it in the output folder")
+
+    console.log("\x1b[32m", "")
+    console.log(`Your readme file has been created! You can find it in the output folder here => ${path.resolve(fileName)}`)
+    console.log("\x1b[0m", "")
+    
 }
 
 function init() {
@@ -64,7 +69,7 @@ function init() {
 
     // inquirer promise
     .then( answers => {
-        
+
         api.getUser(answers.username).then((githubResponse)=>{
         
             //Creating markdown files title
@@ -76,10 +81,16 @@ function init() {
             //Call function to create file
             writeToFile(markdownFileName, markdownFileContent)
         
-        })    
+        })
+        .catch(()=>{
+            console.log("\x1b[31m", "")
+            console.log("An error occured retrieving your github profile. Check that you spelled your username correctly and that your're still connected to your internet, then try again!")
+            return console.log("\x1b[0m", "")
+        })
     })
     .catch(error =>{
-        console.log(error)
+        console.log(error);
+        
     })
 }
 

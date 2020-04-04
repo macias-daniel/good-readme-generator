@@ -40,7 +40,7 @@ ${userAnswers.projectContrib}
 ${userAnswers.projectTests}
 
 ## Questions
-<img src= "${githubResponse.data.avatar_url}" alt= "${userAnswers.username}'s avatar" width="50">
+<img src= "${githubResponse.data.avatar_url}" alt= "${userAnswers.username}'s avatar" width="100">
 
 Contact me at ${userAnswers.userEmail} if you have any questions about my project!
 `

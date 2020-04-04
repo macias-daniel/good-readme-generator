@@ -1,5 +1,7 @@
 
 # Good Read Me Generator
+
+![AppDemo](https://media.giphy.com/media/f6h3ac3uQe5edYQqdS/giphy.gif)
  
 [![License: None](https://img.shields.io/badge/License-None-blue.svg)](https://github.com/macias-daniel/good-readme-generator)
 
@@ -40,3 +42,4 @@ There are no tests
 <img src= "https://avatars2.githubusercontent.com/u/59327488?v=4" alt= "macias-daniel's avatar" width="50">
 
 Contact me at d.macias.apps@gmail.com if you have any questions about my project!
+

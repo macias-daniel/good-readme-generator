@@ -58,7 +58,7 @@ const questions = [
 function writeToFile(fileName, data) {
 
     //Create read me file
-    fs.writeFileSync(`${fileName}`, data)
+    fs.writeFileSync(`./output/${fileName}`, data)
 
     console.log("\x1b[32m", "")
     console.log(`Your readme file has been created! You can find it in the output folder here => ${path.resolve(fileName)}`)

@@ -1,5 +1,4 @@
-
-
+//Generate readme text with arguments passed to userAnswers and githubResponse
 const generate = function(userAnswers, githubResponse){
     return `
 # ${userAnswers.projectTitle}
@@ -46,6 +45,7 @@ Contact me at ${userAnswers.userEmail} if you have any questions about my projec
 `
 }
 
+//Export module
 module.exports = {
     generate: generate
 }

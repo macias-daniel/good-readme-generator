@@ -1,12 +1,12 @@
-// TODO: import axios module
+//Required import
 const axios = require("axios")
 
-// TODO: use dotenv module to get environmental variables if necessary
-
+//Make github axios call with arguments passed to username
 const api = {
   getUser(username) {
    return axios.get(`https://api.github.com/users/${username}`)
   }
 };
 
+//Export module
 module.exports = api;

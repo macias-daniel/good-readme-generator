@@ -1,10 +1,11 @@
-// TODO: import fs, path and inquirer modules
+// Required imports
 const inquirer = require("inquirer")
 const fs = require("fs")
 const markdownGen = require("./utils/markdown")
 const api = require("./utils/api")
 const path = require("path")
 
+//Inquirer Questions
 const questions = [
     {
         type: "input",
@@ -55,7 +56,9 @@ const questions = [
 
 //This function creates read me file
 function writeToFile(fileName, data) {
-    fs.writeFileSync(`./output/${fileName}`, data)
+
+    //Create read me file
+    fs.writeFileSync(`${fileName}`, data)
 
     console.log("\x1b[32m", "")
     console.log(`Your readme file has been created! You can find it in the output folder here => ${path.resolve(fileName)}`)
@@ -63,6 +66,7 @@ function writeToFile(fileName, data) {
     
 }
 
+//Start asking user questions
 function init() {
 
     inquirer.prompt(questions)
@@ -70,12 +74,13 @@ function init() {
     // inquirer promise
     .then( answers => {
 
+        //Get user github data
         api.getUser(answers.username).then((githubResponse)=>{
         
             //Creating markdown files title
             const markdownFileName = `${((answers.projectTitle).replace(/ /g,"-")).toLowerCase()}-readme.md`
     
-             //Markdown file content
+             //Markdown file content created using github profile + user iquierer answers
             const markdownFileContent = markdownGen.generate(answers, githubResponse)
     
             //Call function to create file
@@ -94,4 +99,5 @@ function init() {
     })
 }
 
+//Start program
 init();

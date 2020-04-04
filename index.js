@@ -1,8 +1,8 @@
 // TODO: import fs, path and inquirer modules
 const inquirer = require("inquirer")
-const axios = require("axios")
 const fs = require("fs")
-const markdownGen = require("./markdown")
+const markdownGen = require("./utils/markdown")
+const api = require("./utils/api")
 
 const questions = [
     {
@@ -52,38 +52,35 @@ const questions = [
     }
 ];
 
+//This function creates read me file
 function writeToFile(fileName, data) {
     fs.writeFileSync(`./output/${fileName}`, data)
+    console.log("Your readme file has been created! You can find it in the output folder")
 }
 
 function init() {
 
     inquirer.prompt(questions)
 
-    // inquirer callback
+    // inquirer promise
     .then( answers => {
-
-        //Building user github api url
-        const gitUrl = `https://api.github.com/users/${answers.username}` 
-
-        //Make and return axios call
-        axios.get(gitUrl).then((githubResponse)=>{
-    
+        
+        api.getUser(answers.username).then((githubResponse)=>{
+        
             //Creating markdown files title
-            const markdownFileName = `${answers.projectTitle}-README.md`
+            const markdownFileName = `${((answers.projectTitle).replace(/ /g,"-")).toLowerCase()}-readme.md`
     
-            //Markdown file content
-            const markdownFile = markdownGen.generate(answers, githubResponse)
+             //Markdown file content
+            const markdownFileContent = markdownGen.generate(answers, githubResponse)
     
             //Call function to create file
-            writeToFile(markdownFileName, markdownFile)
-        })
-
+            writeToFile(markdownFileName, markdownFileContent)
+        
+        })    
     })
     .catch(error =>{
         console.log(error)
     })
 }
-
 
 init();
